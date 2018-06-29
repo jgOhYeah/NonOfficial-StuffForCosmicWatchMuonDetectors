@@ -1,4 +1,5 @@
 This is still a Work In Progress! There may be a few bugs.
+- Writing to the oled display is too slow currently. Will need to speed up somehow before this code is of much use running on the detector. Currently the dead time ends up being around 40% of the total running time. The official version using the adafruit library is around 4%.
 
 Non Official Version of the CosmicWatch Desktop Muon Detector Arduino Code
 
