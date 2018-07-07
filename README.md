@@ -12,6 +12,7 @@ Note that the current arduino code saves files in csv format. It should be possi
 It should also be possible to disable various functions such as saving to sd cards, driving the oled display and sending serial data to improve speed or memory usage by commenting out the "#define useSdCard", "#define useSerial", and or "#define useScreen" lines.
 
 I have not tested this with the python scripts, but they might work.
+I have not built a second detector yet, so I have not confirmed that the coincidence functionality works properly either.
 
 ## Muon Detector GUI
 This is a smallish program written in Unity using the C# programming language. It displays live information from the detector.

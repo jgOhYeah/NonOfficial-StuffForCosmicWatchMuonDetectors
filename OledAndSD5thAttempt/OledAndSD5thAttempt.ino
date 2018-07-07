@@ -62,14 +62,17 @@ void setup() {
   ADCSRA &= ~(bit (ADPS0) | bit (ADPS1) | bit (ADPS2));  // clear prescaler bits
   ADCSRA |= bit (ADPS0) | bit (ADPS1);                   // Set prescaler to 8
   //Make the led pin an output
-  pinMode(ledPin, OUTPUT); 
-  pinMode(coincidencePin, INPUT);
-  if(digitalRead(coincidencePin) == HIGH) {
+  //pinMode(ledPin, OUTPUT); 
+  //pinMode(coincidencePin, INPUT);
+  DDRD = (DDRD | ledPin) & (~coincidencePin); //Set the led to be an output and the coincidence pin to be an input
+  if((PIND & coincidencePin) == coincidencePin) { //If the coincidence pin is high, then put into slave mode
     isMaster = false;
-    digitalWrite(ledPin,HIGH);
+    PORTD = PORTD | ledPin; //Turn the led on
   } else {
-    pinMode(coincidencePin, OUTPUT);
-    digitalWrite(coincidencePin,HIGH);
+    //pinMode(coincidencePin, OUTPUT);
+    //digitalWrite(coincidencePin,HIGH);
+    DDRD = DDRD | coincidencePin; //Make the coincidence pin an output
+    PORTD = PORTD | coincidencePin; //Turn the coincidence pin high
   }
 #ifdef useScreen
   //Start the display
@@ -185,6 +188,10 @@ void setup() {
   }
 #ifdef useSdCard
   if(isSDCard) {
+    strcpy_P(charBuffer, cosmicString);
+    myFile.write(charBuffer);
+    myFile.write(' ');
+    strcpy_P(charBuffer, watchString);
     myFile.write(charBuffer);
     strcpy_P(charBuffer, muonString);
     myFile.println(charBuffer);
@@ -233,9 +240,10 @@ void setup() {
   }
 #endif
   if(isMaster) {
-    digitalWrite(coincidencePin,LOW);
+    //digitalWrite(coincidencePin,LOW);
+    PORTD = PORTD & (~coincidencePin); //Make the coincidence pin low
   }
-  digitalWrite(ledPin,LOW);
+  PORTD = PORTD & (~ledPin); //Make the led pin high
 #ifdef useScreen
   //Set up the display for normal viewing
   u8x8.clear();
@@ -264,30 +272,30 @@ void loop() {
     //digitalWrite(ledPin,HIGH);
     //We detected something!
     if(isMaster) {
-      digitalWrite(coincidencePin, HIGH);
+      PORTD = PORTD | coincidencePin; //Make the led pin high
       usePulse = true;
     }
 #if defined useScreen || defined useSerial
     //Swap the adc to the temperature pin and measure a few times to stabilise
     //Also delay a while to allow the coincidence pin to stay high and allow master detector to trigger if slave.
     /*Serial.println("About to read temp");*/
-    analogRead(temperaturePin);
-    analogRead(temperaturePin);
-    float temperatureC = (((analogRead(temperaturePin)+analogRead(temperaturePin)+analogRead(temperaturePin))/3. * (3300./1024)) - tempSenseOffset)/10. ;
+    analogRead(temperaturePin); //Swap the adc to the temperature pin and throw away the first measurement as it might be off by a bit
+    float temperatureC = (((analogRead(temperaturePin)+analogRead(temperaturePin)) * (1650./1024)) - tempSenseOffset)/10. ;
     //adc * 3300 - 1024 * tempSenseOffset / 10
     /*Serial.print("Temp is: ");
     Serial.println(temperatureC);*/
     //Make the text for the file and serial without using the String library to save RAM
 #endif
     if(!isMaster) {
-      if(digitalRead(coincidencePin) == HIGH) {
+      if((PIND & coincidencePin) == coincidencePin) {
         usePulse = true;
       }
     }
     if(usePulse) {
       /*Serial.println("Using Pulse");*/
       count++;
-      digitalWrite(ledPin,HIGH);
+      //digitalWrite(ledPin,HIGH);
+      PORTD = PORTD | ledPin; //Make the led pin high
 #if defined useScreen || defined useSerial
       //In the form of:
       //count,timeStamp,detectionADC,SIPM Voltage,deadTime,temperature
@@ -345,13 +353,15 @@ void loop() {
   #endif
 #endif
     }
-    digitalWrite(ledPin,LOW);
+    //digitalWrite(ledPin,LOW);
+    PORTD = PORTD & (~ledPin); //Make the led pin low
     //Wait until the pulse falls back so does not trigger multiple times for the one muon.
     while(analogRead(detectorPin) > resetThreshold) { 
     }
     
     if(isMaster) {
-      digitalWrite(coincidencePin,LOW);
+      //digitalWrite(coincidencePin,LOW);
+      PORTD = PORTD & (~coincidencePin); //Make the coincidence pin low
     }
     totalDeadtime += (micros() - timeStamp) / 1000;
   }

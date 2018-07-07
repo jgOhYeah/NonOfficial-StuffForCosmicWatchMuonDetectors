@@ -1,11 +1,11 @@
 #define firmwareVers "2.0 non official"
-#define deviceId "Kingswood College A"
+#define deviceId "Muon Detector A"
 //Pins
 #define detectorPin A0
 #define temperaturePin A3
-#define ledPin 3
+#define ledPin B00001000 //Bitmap of pin D3 - Does not use digitalWrite to save time and memory
 #define sdCardPin 10
-#define coincidencePin 6
+#define coincidencePin B01000000 //Bitmap of pin D6
 #define OLED_RESET 10
 
 //Interfaces to use. Comment out to disable non required ones. This will speed the detector up a little bit.
@@ -38,5 +38,3 @@ const long double cal[] = {-9.085681659276021e-27, 4.6790804314609205e-23, -1.03
 #define tempSenseOffset 500 //The voltage (in mV) produced by the temperature sensor when the temperature is 0.
                             //TMP36 (the one that is specified in the design): 500
                             //TMP35: 0
-
-
