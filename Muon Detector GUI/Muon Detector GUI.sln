@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Muon Detector GUI", "Muon Detector GUI.csproj", "{C604B963-1D43-CB3F-870A-8294E7505253}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Muon Detector GUI.Editor", "Muon Detector GUI.Editor.csproj", "{231DA1AA-5C27-6A26-D84F-69EC8B8A92C5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C604B963-1D43-CB3F-870A-8294E7505253}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C604B963-1D43-CB3F-870A-8294E7505253}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C604B963-1D43-CB3F-870A-8294E7505253}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C604B963-1D43-CB3F-870A-8294E7505253}.Release|Any CPU.Build.0 = Release|Any CPU
+		{231DA1AA-5C27-6A26-D84F-69EC8B8A92C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{231DA1AA-5C27-6A26-D84F-69EC8B8A92C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{231DA1AA-5C27-6A26-D84F-69EC8B8A92C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{231DA1AA-5C27-6A26-D84F-69EC8B8A92C5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
