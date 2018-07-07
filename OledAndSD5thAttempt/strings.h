@@ -1,3 +1,11 @@
+/*Strings.h
+ * Code adapted from Spencer Axiani's original software and designs by Jotham Gates
+ * This is a collection of nearly all the strings used in this program so it is easyish to change the wording
+ * Note that if you change some of the strings on this page, you might have to fiddle around a bit with the coordinates in
+ * "u8x8.draw1x2String(x coordinate (0 to 15),y coordinate (0 to 7),text);"
+ * at various parts of this program if the spacing goes weird.
+ * Note also that the u8x8 library wraps text around to the start of the same line if it overflows.
+ */
 const char cosmicString[] PROGMEM = "Cosmic";
 const char watchString[] PROGMEM = "Watch";
 const char noSdCard[] PROGMEM = "No SD Card";

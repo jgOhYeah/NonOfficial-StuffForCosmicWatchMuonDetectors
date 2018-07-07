@@ -1,4 +1,18 @@
-﻿using System;
+﻿/*
+ * Main script in the Muon Detector GUI Program
+ * By Jotham Gates
+ * Sources include:
+ * This tutorial: https://www.alanzucconi.com/2015/10/07/how-to-integrate-arduino-with-unity/
+ * And a few more.
+ * 
+ * This code starts an IENumerator that checks the serial port once every 0.25 seconds and processes the incoming string.
+ * It also starts another IENumerator that updates count rate graph once per minute.
+ * The other function of this code is to display an up time clock for how long the detector has been running.
+ * It does this by finding the difference between the detector's first timestamp when it starts up and the computer's clock of how long this program has been running.
+ * All subsequent times are based off the computer's clock as it is more accurate than the arduino's.
+ * 
+ */
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;

@@ -1,5 +1,5 @@
 # NonOfficial-StuffForCosmicWatchMuonDetectors
-Extra code and stuff I have made/adapted for Spencer Axiani's Cosmic Watch Desktop Muon Detector V2
+Extra code and stuff I (Jotham Gates) have made/adapted for Spencer Axiani's Cosmic Watch Desktop Muon Detector V2
 This is a work in progress and there might be the odd bug and issue.
 
 The official website can be found at [http://www.cosmicwatch.lns.mit.edu/](http://www.cosmicwatch.lns.mit.edu/)

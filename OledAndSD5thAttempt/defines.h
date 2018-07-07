@@ -1,3 +1,7 @@
+/*Defines.h
+ * Code adapted from Spencer Axiani's original software and designs by Jotham Gates
+ * This file allows the software to be customised without having to scroll through many lines of code.
+ */
 #define firmwareVers "2.0 non official"
 #define deviceId "Muon Detector A"
 //Pins

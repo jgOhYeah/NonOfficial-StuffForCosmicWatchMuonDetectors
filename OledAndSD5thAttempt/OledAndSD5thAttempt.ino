@@ -1,7 +1,7 @@
 /* This is still a Work In Progress! There may be a few bugs.
  *  
  * Non Official Version of the CosmicWatch Desktop Muon Detector Arduino Code
- * 
+ * Code adapted from Spencer Axiani's original software and designs by Jotham Gates
  * The original code and documentation / designs can be found here:
  * https://github.com/spenceraxani/CosmicWatch-Desktop-Muon-Detector-v2
  * 
@@ -243,7 +243,7 @@ void setup() {
     //digitalWrite(coincidencePin,LOW);
     PORTD = PORTD & (~coincidencePin); //Make the coincidence pin low
   }
-  PORTD = PORTD & (~ledPin); //Make the led pin high
+  PORTD = PORTD & (~ledPin); //Make the led pin low
 #ifdef useScreen
   //Set up the display for normal viewing
   u8x8.clear();
