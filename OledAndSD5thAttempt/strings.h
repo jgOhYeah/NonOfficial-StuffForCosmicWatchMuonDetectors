@@ -10,13 +10,7 @@ const char cosmicString[] PROGMEM = "Cosmic";
 const char watchString[] PROGMEM = "Watch";
 const char noSdCard[] PROGMEM = "No SD Card";
 const char sdPresent[] PROGMEM = "SD Card Present";
-#ifdef saveAsCSV
-const char filename[] PROGMEM = "Muon_XYZ.csv";
-  #define seperatorChar ','
-#else
-const char filename[] PROGMEM = "Muon_XYZ.txt";
-  #define seperatorChar ' '
-#endif
+const char filename[] PROGMEM = "Muon_";
 const char fileError[] PROGMEM = "File Error";
 const char zero[] PROGMEM = "0";
 const char muonString[] PROGMEM = " Muon Detector";
@@ -24,12 +18,12 @@ const char muonString[] PROGMEM = " Muon Detector";
 const char compiledString[] PROGMEM = compiledPreprocessor;
 #define firmwarePreprocessor "Firmware version: " firmwareVers
 const char firmwareString[] PROGMEM = firmwarePreprocessor;
-#define deviceIdPreprocessor "Device ID: " deviceId
-const char deviceIdentity[] PROGMEM = deviceIdPreprocessor;
+const char deviceIdentity[] PROGMEM = "Device ID: ";
 const char aboutString1[] PROGMEM = "Official website: http://cosmicwatch.lns.mit.edu/";
 const char aboutString2[] PROGMEM = "This software can be found at: ";
 const char aboutString3[] PROGMEM = "https://github.com/jgOhYeah/NonOfficial-StuffForCosmicWatchMuonDetectors";
 const char csvHeader[] PROGMEM = "Count,Time Stamp,Measured ADC,SIPM Voltage,Dead Time,Temperature C";
+const char txtHeader[] PROGMEM = "Count Time_Stamp Measured_ADC SIPM_Voltage Dead_Time Temperature_C";
 const char loggingTo[] PROGMEM = "Logging to: ";
 const char totalCount[] PROGMEM = "Count 0";
 const char upTime[] PROGMEM = "Time";
@@ -40,6 +34,21 @@ const char rateString[] PROGMEM = "Rate";
 const char masterString[] PROGMEM = "Master";
 const char slaveString[] PROGMEM = "Slave";
 const char colon[] PROGMEM = ":";
-
-
-
+const char settingsInstructions[] PROGMEM = "To change various settings, type \"Settings\"";
+const char settingsInstructions2[] PROGMEM = " before the detector starts detecting";
+const char settingsHeading[] PROGMEM = "Settings Entered.";
+const char settingsHeading1[] PROGMEM = "\t- Set line one of the detector ID: Type \"ID1 \" followed by the name";
+const char settingsHeading2[] PROGMEM = "\t- Set line two of the detector ID: Type \"ID2 \" followed by the name";
+const char settingsHeading3[] PROGMEM = "\t- Set the file format saved (txt or csv):";
+const char settingsHeading4[] PROGMEM =  " Type \"Format \" followed by \".txt\" or \".csv\"";
+const char settingsAndNL[] PROGMEM = " and then a new line";
+const char experiencedSuccess[] PROGMEM = "Success";
+const char noSuccess[] PROGMEM = "Error. Please try again";
+const char resetToExit[] PROGMEM = "Reset to exit";
+const char mistakeText[] PROGMEM = "If you make a mistake, please type \"x x \" to continue";
+const char settingsString[] PROGMEM = "Settings";
+const char id1String[] PROGMEM = "ID1";
+const char id2String[] PROGMEM = "ID2";
+const char formatString[] PROGMEM = "Format";
+const char txtString[] PROGMEM = ".txt";
+const char csvString[] PROGMEM = ".csv";

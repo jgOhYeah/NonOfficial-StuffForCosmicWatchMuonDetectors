@@ -2,8 +2,7 @@
  * Code adapted from Spencer Axiani's original software and designs by Jotham Gates
  * This file allows the software to be customised without having to scroll through many lines of code.
  */
-#define firmwareVers "2.0 non official"
-#define deviceId "Muon Detector A"
+#define firmwareVers "2.1 non official"
 //Pins
 #define detectorPin A0
 #define temperaturePin A3
@@ -13,11 +12,13 @@
 #define OLED_RESET 10
 
 //Interfaces to use. Comment out to disable non required ones. This will speed the detector up a little bit.
-//If both serial and the sd card are not required, the arduino will not bother to take readings from the tmperature sensor or format the values as a string.
+//If both serial and the sd card are not required, the arduino will not bother to take readings from the temperature sensor or format the values as a string.
 //If the screen is used, it will be updated once per second.
 #define useScreen //Whether to include the library and code for driving the oled display or not
 #define useSdCard //Whether to include the library and code for writing to the sd card
 #define useSerial //Whether to enable serial
+#define useSerialSettings //Whether to include code for saving the detector name into eeprom without having to flash naming.ino
+                          //Will only be enabled if useSerial is enabled as well
 
 //Thresholds
 #define signalThreshold 50
@@ -42,3 +43,9 @@ const long double cal[] = {-9.085681659276021e-27, 4.6790804314609205e-23, -1.03
 #define tempSenseOffset 500 //The voltage (in mV) produced by the temperature sensor when the temperature is 0.
                             //TMP36 (the one that is specified in the design): 500
                             //TMP35: 0
+#define serialTimeout 65535 //Timeout for serial reads
+//Make sure that these are the same as the naming sketch - needs to be the version modified for this 
+#define deviceID1Address 0
+#define deviceID2Address 40 //By using 40, first line should be the normal naming.ino setting
+#define formatAddress 80
+#define eepromStringLength 40
