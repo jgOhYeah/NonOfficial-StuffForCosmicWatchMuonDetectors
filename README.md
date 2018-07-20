@@ -22,6 +22,12 @@ From there, type "ID1 " then the name for the first part of the detector id or "
 
 If you happen to make a mistake when typing in a setting to change and are having problems changing anything else, either reset the detector and reenter the settings menu or try typing something along the lines of "x x " to the the light to come on again (or go off, then type again to make it turn on). - This is due to a slight issue with how the program accepts text.
 
+## Bulk Settings Arduino Sketch
+Use to load the default settings into eeprom if you have a few detectors to program or don't want to use the built in settings menu.
+
+Similar to the official naming.ino sketch except supports the second line of the detector ID and the file format.
+
+To use, edit the #defines in the top of the file then compile and upload. When the Arduino next starts up, it will copy the values into EEPROM.
 ## Muon Detector GUI
 This is a smallish program written in Unity using the C# programming language. It displays live information from the detector. - I would probably recommend the [official online version](http://cosmicwatch.lns.mit.edu/measure) if you have internet access.
 The compiled files can be found in the folder named build. Please note that I have not tested the Macintosh version and it may or may not work.

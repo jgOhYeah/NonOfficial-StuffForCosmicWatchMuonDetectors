@@ -35,7 +35,6 @@ const long double cal[] = {-9.085681659276021e-27, 4.6790804314609205e-23, -1.03
 #define fileNumberStartPoint 5 //Position of the hundreds char in the filename
 #define maxNumberOfFiles 200 //Maximum file number before rolls back to 0 Needs to be less then 255 - numberOfFilesToDelete
 #define screenUpdateTime 1000
-#define saveAsCSV //If left in, saves .csv files. If commented out, saves .txt files.
 //This also affects the serial port - use txt with the python scripts for uploading to a webserver.
 #define barChartChar '-'
 #define slaveChar 'S'
