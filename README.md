@@ -5,7 +5,7 @@ This is a work in progress and there might be the odd bug and issue.
 The official website can be found at [http://www.cosmicwatch.lns.mit.edu/](http://www.cosmicwatch.lns.mit.edu/)
 The official github repository and resources can be found at [https://github.com/spenceraxani/CosmicWatch-Desktop-Muon-Detector-v2](https://github.com/spenceraxani/CosmicWatch-Desktop-Muon-Detector-v2)
 
-## Arduino Sketch
+## Arduino Sketch (OledAndSD5thAttempt)
 The arduino sketch here is an attempt to get the oled display and the sd card to work at the same time.
 
 
@@ -15,7 +15,7 @@ This software mostly works with the python scripts and server, although it does 
 
 The latest code now reads the detector id from EEPROM memory. In this version is is saved as two parts - one for one line on the display and the other for the one below. In files and serial, these parts get concatenated. - Add a space to the end of the first part if you want a space between them without effecting how it displays on the oled screen.
 
-###To save values and settings in EEPROM:
+### To save values and settings in EEPROM:
 With the serial terminal set to "\\n" as the line ending character, type "Settings" before the detector fully starts up and begins counting events.
 
 From there, type "ID1 " then the name for the first part of the detector id or "ID2 " then name for the second part of the detector id or "Format " then ".csv" or ".txt" to select the format to save to the sd card. - Changing this will have no effect if useSdCard is not defined in defines.h.
