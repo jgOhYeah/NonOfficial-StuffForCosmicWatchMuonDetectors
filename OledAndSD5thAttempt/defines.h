@@ -2,7 +2,7 @@
  * Code adapted from Spencer Axiani's original software and designs by Jotham Gates
  * This file allows the software to be customised without having to scroll through many lines of code.
  */
-#define firmwareVers "2.1 non official"
+#define firmwareVers "2.1.1 non official"
 //Pins
 #define detectorPin A0
 #define temperaturePin A3
@@ -35,16 +35,13 @@ const long double cal[] = {-9.085681659276021e-27, 4.6790804314609205e-23, -1.03
 #define fileNumberStartPoint 5 //Position of the hundreds char in the filename
 #define maxNumberOfFiles 200 //Maximum file number before rolls back to 0 Needs to be less then 255 - numberOfFilesToDelete
 #define screenUpdateTime 1000
-//This also affects the serial port - use txt with the python scripts for uploading to a webserver.
-#define barChartChar '-'
-#define slaveChar 'S'
-#define masterChar 'M'
 #define tempSenseOffset 500 //The voltage (in mV) produced by the temperature sensor when the temperature is 0.
                             //TMP36 (the one that is specified in the design): 500
                             //TMP35: 0
-#define serialTimeout 65535 //Timeout for serial reads
+#define serialTimeout 10000 //Timeout for serial reads
 //Make sure that these are the same as the naming sketch - needs to be the version modified for this 
 #define deviceID1Address 0
 #define deviceID2Address 40 //By using 40, first line should be the normal naming.ino setting
 #define formatAddress 80
 #define eepromStringLength 40
+#define contrastAddress 81

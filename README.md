@@ -18,9 +18,9 @@ The latest code now reads the detector id from EEPROM memory. In this version is
 ### To save values and settings in EEPROM:
 With the serial terminal set to "\\n" as the line ending character, type "Settings" before the detector fully starts up and begins counting events.
 
-From there, type "ID1 " then the name for the first part of the detector id or "ID2 " then name for the second part of the detector id or "Format " then ".csv" or ".txt" to select the format to save to the sd card. - Changing this will have no effect if useSdCard is not defined in defines.h.
+From there, type "ID1 " then the name for the first part of the detector id or "ID2 " then name for the second part of the detector id or "Format " then ".csv" or ".txt" to select the format to save to the sd card. - Changing this will have no effect if useSdCard is not defined (commented out) in defines.h.
 
-If you happen to make a mistake when typing in a setting to change and are having problems changing anything else, either reset the detector and reenter the settings menu or try typing something along the lines of "x x " to the the light to come on again (or go off, then type again to make it turn on). - This is due to a slight issue with how the program accepts text.
+If you happen to make a mistake when typing in a setting to change and are having problems changing anything else, either reset the detector and reenter the settings menu or try typing something along the lines of "x x " or "dd  cv vvxcsd cx" to the the light to come on again (or go off, then type again to make it turn on). - This is due to a slight issue with how the program accepts text.
 
 ## Bulk Settings Arduino Sketch
 Use to load the default settings into eeprom if you have a few detectors to program or don't want to use the built in settings menu.
@@ -29,6 +29,6 @@ Similar to the official naming.ino sketch except supports the second line of the
 
 To use, edit the #defines in the top of the file then compile and upload. When the Arduino next starts up, it will copy the values into EEPROM.
 ## Muon Detector GUI
-This is a smallish program written in Unity using the C# programming language. It displays live information from the detector. - I would probably recommend the [official online version](http://cosmicwatch.lns.mit.edu/measure) if you have internet access.
+This is a smallish program written in Unity using the C# programming language. It displays live information from the detector. - I would probably recommend the [official online version](http://cosmicwatch.lns.mit.edu/measure) combined with one of the server programs if you have internet access.
 The compiled files can be found in the folder named build. Please note that I have not tested the Macintosh version and it may or may not work.
-The graphs are done using the Dynamic Line Chart asset package by Yun Shi. Various bits of the code (ie most of it) are copied from various tutorials and websites and merged together, although I can't remember exactly which bits of code were copied and where they came from.
+The graphs are done using the Dynamic Line Chart asset package by Yun Shi. Various bits of the code are copied from various tutorials and websites and merged together, although I can't remember exactly which bits of code were copied and where they came from.

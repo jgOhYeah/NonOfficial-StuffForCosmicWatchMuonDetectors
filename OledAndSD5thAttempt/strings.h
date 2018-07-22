@@ -41,7 +41,8 @@ const char settingsHeading1[] PROGMEM = "\t- Set line one of the detector ID: Ty
 const char settingsHeading2[] PROGMEM = "\t- Set line two of the detector ID: Type \"ID2 \" followed by the name";
 const char settingsHeading3[] PROGMEM = "\t- Set the file format saved (txt or csv):";
 const char settingsHeading4[] PROGMEM =  " Type \"Format \" followed by \".txt\" or \".csv\"";
-const char settingsAndNL[] PROGMEM = " and then a new line";
+const char settingsHeading5[] PROGMEM = "\t- Set display contrast: Type \"Contrast \" followed by 0 (dim) to 255 (bright)";
+const char settingsAndNL[] PROGMEM = " and then a new line.";
 const char experiencedSuccess[] PROGMEM = "Success";
 const char noSuccess[] PROGMEM = "Error. Please try again";
 const char resetToExit[] PROGMEM = "Reset to exit";
@@ -50,5 +51,9 @@ const char settingsString[] PROGMEM = "Settings";
 const char id1String[] PROGMEM = "ID1";
 const char id2String[] PROGMEM = "ID2";
 const char formatString[] PROGMEM = "Format";
+const char contrastString[] PROGMEM = "Contrast";
 const char txtString[] PROGMEM = ".txt";
 const char csvString[] PROGMEM = ".csv";
+#define barChartChar '-'
+#define slaveChar 'S'
+#define masterChar 'M'

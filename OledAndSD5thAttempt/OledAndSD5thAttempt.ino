@@ -9,7 +9,7 @@
     - Using a smaller library for the driving the display to save RAM it is also fairly fast
     - Able to save files both as csv and the original text file - selectable in the settings menu
       - CSV does not have to be imported into spreadsheet applications, text does (at least for me)
-      - Text can be easier analysed using the official online web app at http://cosmicwatch.lns.mit.edu/measure
+      - Text is what the original detector software saves files as, for compatability - note that the header is slightly different and might cause the odd issue, but the data is structured the same.
     - Tries to use char arrays instead of the String library to save RAM.
     - Does not fully support the python scripts for downloading and deleting files from the sd card
     - EEPROM can be programmed by the main program - type "Settings" (with the serial terminal set to \n as new line) before the detector finishes starting up.
@@ -84,6 +84,7 @@ void setup() {
   u8x8.setFlipMode(1);
   u8x8.setPowerSave(0);
   u8x8.setFont(u8x8_font_chroma48medium8_r);
+  u8x8.setContrast(EEPROM.read(contrastAddress));
 #endif
   //Put screen upside down
 #ifdef useSerial
@@ -285,11 +286,17 @@ void setup() {
   PORTD = PORTD & (~ledPin); //Make the led pin low
 #ifdef useScreen
   //Set up the display for normal viewing
+  const byte offsetColon1[] = {B00110000,0,0,0,0,0,0,0}; //Char that puts a colon on the left side to make it appear as a colon and a space
+  const byte offsetColon2[] = {B00001100,0,0,0,0,0,0,0}; //Char that puts a colon on the left side to make it appear as a colon and a space
   u8x8.clear();
   strcpy_P(charBuffer, totalCount);
   u8x8.draw1x2String(0, 0, charBuffer);
+  u8x8.drawTile(5,0,1,offsetColon1);
+  u8x8.drawTile(5,1,1,offsetColon2);
   strcpy_P(charBuffer, upTime);
   u8x8.draw1x2String(0, 2, charBuffer);
+  u8x8.drawTile(4,2,1,offsetColon1);
+  u8x8.drawTile(4,3,1,offsetColon2);
   if (isMaster) {
     u8x8.draw1x2Glyph(0, 4, masterChar);
   } else {
@@ -297,6 +304,8 @@ void setup() {
   }
   strcpy_P(charBuffer, rateString);
   u8x8.draw1x2String(0, 6, charBuffer);
+  u8x8.drawTile(4,6,1,offsetColon1);
+  u8x8.drawTile(4,7,1,offsetColon2);
 #endif
 #if defined useSerial && defined useSerialSettings
   enterSettings();
@@ -591,16 +600,20 @@ void enterSettings() {
         u8x8.draw1x2String(0,3,charBuffer);
   #endif
         strcpy_P(charBuffer, settingsHeading1);
-        Serial.println(charBuffer);
+        Serial.write(charBuffer);
         strcpy_P(charBuffer, settingsAndNL);
         Serial.println(charBuffer);
         strcpy_P(charBuffer, settingsHeading2);
-        Serial.println(charBuffer);
+        Serial.write(charBuffer);
         strcpy_P(charBuffer, settingsAndNL);
         Serial.println(charBuffer);
         strcpy_P(charBuffer, settingsHeading3);
         Serial.write(charBuffer);
         strcpy_P(charBuffer, settingsHeading4);
+        Serial.write(charBuffer);
+        strcpy_P(charBuffer, settingsAndNL);
+        Serial.println(charBuffer);
+        strcpy_P(charBuffer, settingsHeading5);
         Serial.write(charBuffer);
         strcpy_P(charBuffer, settingsAndNL);
         Serial.println(charBuffer);
@@ -647,6 +660,16 @@ void enterSettings() {
               }
               isSuccess = true;
             }
+            strcpy_P(compareBuffer, contrastString);
+            //If it matches
+            if(strcmp(charBuffer,compareBuffer) == 0) {
+              charsRead = Serial.parseInt();
+              EEPROM.update(contrastAddress,charsRead);
+  #ifdef useScreen
+              u8x8.setContrast(charsRead);
+  #endif
+              isSuccess = true;
+            }
             if(isSuccess) {
               strcpy_P(charBuffer,experiencedSuccess);
             } else {
@@ -674,7 +697,7 @@ void writeToEeprom(int startAddress, char* charArray) {
 }
 void clearSerialBuffer() {
   while(Serial.available()) {
-   Serial.println(Serial.read());
+   Serial.read();
   }
 }
 #endif
