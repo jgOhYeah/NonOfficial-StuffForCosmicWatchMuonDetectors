@@ -14,10 +14,10 @@ const char filename[] PROGMEM = "Muon_";
 const char fileError[] PROGMEM = "File Error";
 const char zero[] PROGMEM = "0";
 const char muonString[] PROGMEM = " Muon Detector";
-#define compiledPreprocessor "Compiled: " __DATE__ " at " __TIME__
-const char compiledString[] PROGMEM = compiledPreprocessor;
-#define firmwarePreprocessor "Firmware version: " firmwareVers
-const char firmwareString[] PROGMEM = firmwarePreprocessor;
+#define PREPROCESSOR_COMPILED "Compiled: " __DATE__ " at " __TIME__
+const char compiledString[] PROGMEM = PREPROCESSOR_COMPILED;
+#define PREPROCESSOR_FIRMWARE "Firmware version: " FIRMWARE_VERSION
+const char firmwareString[] PROGMEM = PREPROCESSOR_FIRMWARE;
 const char deviceIdentity[] PROGMEM = "Device ID: ";
 const char aboutString1[] PROGMEM = "Official website: http://cosmicwatch.lns.mit.edu/";
 const char aboutString2[] PROGMEM = "This software can be found at: ";
@@ -54,6 +54,6 @@ const char formatString[] PROGMEM = "Format";
 const char contrastString[] PROGMEM = "Contrast";
 const char txtString[] PROGMEM = ".txt";
 const char csvString[] PROGMEM = ".csv";
-#define barChartChar '-'
-#define slaveChar 'S'
-#define masterChar 'M'
+#define CHAR_BAR_CHART '-'
+#define CHAR_SLAVE 'S'
+#define CHAR_MASTER 'M'

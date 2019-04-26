@@ -33,17 +33,17 @@
 #include "defines.h"
 #include "strings.h"
 
-#ifdef useScreen
+#ifdef USE_SCREEN
 //LCD Libraries. This one is slightly smaller than the adafruit one, although with a few less features.
 #include <Wire.h>
 #include <U8x8lib.h>
 #endif
 //SD card
-#ifdef useSdCard
+#ifdef USE_SD_CARD
 #include <SD.h>
 File myFile;
 #endif
-#ifdef useScreen
+#ifdef USE_SCREEN
 U8X8_SSD1306_128X64_NONAME_HW_I2C u8x8(U8X8_PIN_NONE);
 #endif
 #include <EEPROM.h>
@@ -54,7 +54,7 @@ float sipmVoltage = 0;
 //Timing
 unsigned int startTime = 0;
 unsigned long totalDeadtime = 0;
-#ifdef useSdCard
+#ifdef USE_SD_CARD
 //SD Card stuff
 bool isSDCard = false;
 char separatorChar = ' ';
@@ -67,60 +67,60 @@ void setup() {
   ADCSRA &= ~(bit (ADPS0) | bit (ADPS1) | bit (ADPS2));  // clear prescaler bits
   ADCSRA |= bit (ADPS0) | bit (ADPS1);                   // Set prescaler to 8
   //Make the led pin an output
-  //pinMode(ledPin, OUTPUT);
-  //pinMode(coincidencePin, INPUT);
-  DDRD = (DDRD | ledPin) & (~coincidencePin); //Set the led to be an output and the coincidence pin to be an input
-  if ((PIND & coincidencePin) == coincidencePin) { //If the coincidence pin is high, then put into slave mode
+  //pinMode(PIN_LED, OUTPUT);
+  //pinMode(PIN_COINCIDENCE, INPUT);
+  DDRD = (DDRD | PIN_LED) & (~PIN_COINCIDENCE); //Set the led to be an output and the coincidence pin to be an input
+  if ((PIND & PIN_COINCIDENCE) == PIN_COINCIDENCE) { //If the coincidence pin is high, then put into slave mode
     isMaster = false;
-    PORTD = PORTD | ledPin; //Turn the led on
+    PORTD = PORTD | PIN_LED; //Turn the led on
   } else {
-    //pinMode(coincidencePin, OUTPUT);
-    //digitalWrite(coincidencePin,HIGH);
-    DDRD = DDRD | coincidencePin; //Make the coincidence pin an output
-    PORTD = PORTD | coincidencePin; //Turn the coincidence pin high
+    //pinMode(PIN_COINCIDENCE, OUTPUT);
+    //digitalWrite(PIN_COINCIDENCE,HIGH);
+    DDRD = DDRD | PIN_COINCIDENCE; //Make the coincidence pin an output
+    PORTD = PORTD | PIN_COINCIDENCE; //Turn the coincidence pin high
   }
-#ifdef useScreen
+#ifdef USE_SCREEN
   //Start the display
   u8x8.begin();
   u8x8.setFlipMode(1);
   u8x8.setPowerSave(0);
   u8x8.setFont(u8x8_font_chroma48medium8_r);
-  u8x8.setContrast(EEPROM.read(contrastAddress));
+  u8x8.setContrast(EEPROM.read(EEPROM_CONSTRAST));
 #endif
   //Put screen upside down
-#ifdef useSerial
+#ifdef USE_SERIAL
   //Set up serial
   Serial.begin(9600);
   Serial.setTimeout(3000);
 #endif
   char charBuffer[67] = ""; //Define as an empty string to keep the compiler happy.
-#if defined useScreen || defined useSerial
+#if defined USE_SCREEN || defined USE_SERIAL
   //Strings stored in PROGMEM need to be copied to RAM before they can be used. charBuffer is a temporary spot for them.
   strcpy_P(charBuffer, cosmicString);
-#ifdef useScreen
+#ifdef USE_SCREEN
   u8x8.draw2x2String(0, 0, charBuffer);
 #endif
-#ifdef useSerial
+#ifdef USE_SERIAL
   Serial.write(charBuffer);
   Serial.write(' ');
 #endif
   strcpy_P(charBuffer, watchString);
-#ifdef useScreen
+#ifdef USE_SCREEN
   u8x8.draw2x2String(6, 2, charBuffer);
-  getEepromString(deviceID1Address,16,charBuffer);
+  getEepromString(EEPROM_ID1,16,charBuffer);
   u8x8.draw1x2String(0,4,charBuffer);
-  byte secondRowLength = getEepromString(deviceID2Address,16,charBuffer);
+  byte secondRowLength = getEepromString(EEPROM_ID2,16,charBuffer);
   u8x8.draw1x2String(17 - secondRowLength,6,charBuffer);
 #endif
-#ifdef useSerial
+#ifdef USE_SERIAL
   Serial.write(charBuffer);
   strcpy_P(charBuffer, muonString);
   Serial.println(charBuffer);
   strcpy_P(charBuffer, deviceIdentity);
   Serial.write(charBuffer);
-  getEepromString(deviceID1Address,eepromStringLength,charBuffer);
+  getEepromString(EEPROM_ID1,EEPROM_STRING_LENGTH,charBuffer);
   Serial.write(charBuffer);
-  getEepromString(deviceID2Address,eepromStringLength,charBuffer);
+  getEepromString(EEPROM_ID2,EEPROM_STRING_LENGTH,charBuffer);
   Serial.println(charBuffer);
   strcpy_P(charBuffer, firmwareString);
   Serial.println(charBuffer);
@@ -132,7 +132,7 @@ void setup() {
   Serial.write(charBuffer);
   strcpy_P(charBuffer, aboutString3);
   Serial.println(charBuffer);
-  #ifdef useSerialSettings
+  #ifdef USE_SERIAL_SETTINGS
   strcpy_P(charBuffer, settingsInstructions);
   Serial.write(charBuffer);
   strcpy_P(charBuffer, settingsAndNL);
@@ -144,32 +144,32 @@ void setup() {
 #endif
 #endif
   delay(1000);
-#ifdef useSdCard
+#ifdef USE_SD_CARD
   //Set up the sd card
-  if (SD.begin(sdCardPin)) {
+  if (SD.begin(PIN_SD_CARD)) {
     char fileExtension[5];
-    if(EEPROM.read(formatAddress) == 0) {
+    if(EEPROM.read(EEPROM_FILE_FORMAT) == 0) {
       strcpy_P(fileExtension,txtString);
       //Separator char is already set
     } else {
       strcpy_P(fileExtension,csvString);
       separatorChar = ',';
     }
-#if defined useScreen || defined useSerial
+#if defined USE_SCREEN || defined USE_SERIAL
     strcpy_P(charBuffer, sdPresent);
-#ifdef useSerial
+#ifdef USE_SERIAL
     Serial.println(charBuffer);
 #endif
     //Put here as sd.begin has a time delay
-#ifdef useScreen
+#ifdef USE_SCREEN
     u8x8.clear();
     u8x8.draw1x2String(0, 0, charBuffer);
 #endif
     strcpy_P(charBuffer, loggingTo);
-#ifdef useScreen
+#ifdef USE_SCREEN
     u8x8.draw1x2String(0, 2, charBuffer);
 #endif
-#ifdef useSerial
+#ifdef USE_SERIAL
     Serial.print(charBuffer);
 #endif
 #endif
@@ -184,7 +184,7 @@ void setup() {
         break;
       }
       i++;
-      if (i > maxNumberOfFiles) {
+      if (i > MAX_FILES) {
         i = 0;
         //Write the filename with the right number into charBuffer using a reference
         filenameOfI(0, charBuffer, fileExtension);
@@ -199,24 +199,24 @@ void setup() {
       isSDCard = false;
       strcpy_P(charBuffer, fileError);
     }
-#ifdef useSerial
+#ifdef USE_SERIAL
     Serial.println(charBuffer);
 #endif
-#ifdef useScreen
+#ifdef USE_SCREEN
     u8x8.draw1x2String(0, 4, charBuffer);
 #endif
   } else {
     strcpy_P(charBuffer, noSdCard);
-#ifdef useSerial
+#ifdef USE_SERIAL
     Serial.println(charBuffer);
 #endif
     //Put here as sd.begin has a time delay
-#ifdef useScreen
+#ifdef USE_SCREEN
     u8x8.clear();
     u8x8.draw1x2String(0, 0, charBuffer);
 #endif
   }
-#ifdef useSdCard
+#ifdef USE_SD_CARD
   if (isSDCard) {
     strcpy_P(charBuffer, cosmicString);
     myFile.write(charBuffer);
@@ -227,9 +227,9 @@ void setup() {
     myFile.println(charBuffer);
     strcpy_P(charBuffer, deviceIdentity);
     myFile.write(charBuffer);
-    getEepromString(deviceID1Address,eepromStringLength,charBuffer);
+    getEepromString(EEPROM_ID1,EEPROM_STRING_LENGTH,charBuffer);
     myFile.write(charBuffer);
-    getEepromString(deviceID2Address,eepromStringLength,charBuffer);
+    getEepromString(EEPROM_ID2,EEPROM_STRING_LENGTH,charBuffer);
     myFile.println(charBuffer);
     strcpy_P(charBuffer, firmwareString);
     myFile.println(charBuffer);
@@ -246,31 +246,31 @@ void setup() {
   }
 #endif
 #endif
-#if defined useScreen || defined useSerial || defined useSdCard
+#if defined USE_SCREEN || defined USE_SERIAL || defined USE_SD_CARD
   if (isMaster) {
     strcpy_P(charBuffer, masterString);
   } else {
     strcpy_P(charBuffer, slaveString);
   }
 #endif
-#ifdef useScreen
+#ifdef USE_SCREEN
   u8x8.draw1x2String(0, 6, charBuffer);
 #endif
-#ifdef useSdCard
+#ifdef USE_SD_CARD
   if (isSDCard) {
     myFile.println(charBuffer);
     myFile.flush();
   }
 #endif
-#ifdef useSerial
+#ifdef USE_SERIAL
   Serial.println(charBuffer);
 #endif
   delay(1000);
   strcpy_P(charBuffer, txtHeader);
-#ifdef useSerial
+#ifdef USE_SERIAL
   Serial.println(charBuffer);
 #endif
-#ifdef useSdCard
+#ifdef USE_SD_CARD
   if (isSDCard) {
     //Get the header with commas instead of spaces if saving as a csv
     if(separatorChar == ',') {
@@ -281,11 +281,11 @@ void setup() {
   }
 #endif
   if (isMaster) {
-    //digitalWrite(coincidencePin,LOW);
-    PORTD = PORTD & (~coincidencePin); //Make the coincidence pin low
+    //digitalWrite(PIN_COINCIDENCE,LOW);
+    PORTD = PORTD & (~PIN_COINCIDENCE); //Make the coincidence pin low
   }
-  PORTD = PORTD & (~ledPin); //Make the led pin low
-#ifdef useScreen
+  PORTD = PORTD & (~PIN_LED); //Make the led pin low
+#ifdef USE_SCREEN
   //Set up the display for normal viewing
   const byte offsetColon1[] = {B00110000,0,0,0,0,0,0,0}; //Char that puts a colon on the left side to make it appear as a colon and a space
   const byte offsetColon2[] = {B00001100,0,0,0,0,0,0,0}; //Char that puts a colon on the left side to make it appear as a colon and a space
@@ -299,56 +299,56 @@ void setup() {
   u8x8.drawTile(4,2,1,offsetColon1);
   u8x8.drawTile(4,3,1,offsetColon2);
   if (isMaster) {
-    u8x8.draw1x2Glyph(0, 4, masterChar);
+    u8x8.draw1x2Glyph(0, 4, CHAR_MASTER);
   } else {
-    u8x8.draw1x2Glyph(0, 4, slaveChar);
+    u8x8.draw1x2Glyph(0, 4, CHAR_SLAVE);
   }
   strcpy_P(charBuffer, rateString);
   u8x8.draw1x2String(0, 6, charBuffer);
   u8x8.drawTile(4,6,1,offsetColon1);
   u8x8.drawTile(4,7,1,offsetColon2);
 #endif
-#if defined useSerial && defined useSerialSettings
+#if defined USE_SERIAL && defined USE_SERIAL_SETTINGS
   enterSettings();
 #endif
-  analogRead(detectorPin);
+  analogRead(PIN_DETECTOR);
   startTime = millis();
 }
 
 void loop() {
-  if (analogRead(detectorPin) > signalThreshold) {
-    int detectionADC = analogRead(detectorPin);
+  if (analogRead(PIN_DETECTOR) > THRESHOLD_SIGNAL) {
+    int detectionADC = analogRead(PIN_DETECTOR);
     unsigned long timeStamp = micros();
     unsigned long timeDetecting = millis() - startTime;
     bool usePulse = false;
-    //digitalWrite(ledPin,HIGH);
+    //digitalWrite(PIN_LED,HIGH);
     //We detected something!
     if (isMaster) {
-      PORTD = PORTD | coincidencePin; //Make the led pin high
+      PORTD = PORTD | PIN_COINCIDENCE; //Make the led pin high
       usePulse = true;
     }
-#if defined useScreen || defined useSerial
+#if defined USE_SCREEN || defined USE_SERIAL
     //Swap the adc to the temperature pin and measure a few times to stabilise
     //Also delay a while to allow the coincidence pin to stay high and allow master detector to trigger if slave.
     /*Serial.println("About to read temp");*/
-    analogRead(temperaturePin); //Swap the adc to the temperature pin and throw away the first measurement as it might be off by a bit
-    float temperatureC = (((analogRead(temperaturePin) + analogRead(temperaturePin)) * (1650. / 1024)) - tempSenseOffset) / 10. ;
-    //adc * 3300 - 1024 * tempSenseOffset / 10
+    analogRead(PIN_TEMPERATURE); //Swap the adc to the temperature pin and throw away the first measurement as it might be off by a bit
+    float temperatureC = (((analogRead(PIN_TEMPERATURE) + analogRead(PIN_TEMPERATURE)) * (1650. / 1024)) - TEMPERATURE_SENSOR_OFFSET) / 10. ;
+    //adc * 3300 - 1024 * TEMPERATURE_SENSOR_OFFSET / 10
     /*Serial.print("Temp is: ");
       Serial.println(temperatureC);*/
     //Make the text for the file and serial without using the String library to save RAM
 #endif
     if (!isMaster) {
-      if ((PIND & coincidencePin) == coincidencePin) {
+      if ((PIND & PIN_COINCIDENCE) == PIN_COINCIDENCE) {
         usePulse = true;
       }
     }
     if (usePulse) {
       /*Serial.println("Using Pulse");*/
       count++;
-      //digitalWrite(ledPin,HIGH);
-      PORTD = PORTD | ledPin; //Make the led pin high
-#if defined useScreen || defined useSerial
+      //digitalWrite(PIN_LED,HIGH);
+      PORTD = PORTD | PIN_LED; //Make the led pin high
+#if defined USE_SCREEN || defined USE_SERIAL
       //In the form of:
       //count,timeStamp,detectionADC,SIPM Voltage,deadTime,temperature
       sipmVoltage = get_sipm_voltage(detectionADC);
@@ -370,7 +370,7 @@ void loop() {
       dtostrf(sipmVoltage, 1, decimalPlaces, sipmVString);
       ltoa(totalDeadtime, deadtimeString, 10);
       dtostrf(temperatureC, 1, 1, tempCString);
-#ifdef useSerial
+#ifdef USE_SERIAL
       //Always use spaces as a seperator so is compatible with the python scripts
       //The real time graphing in the unity program accepts either commas or spaces
       Serial.write(countString);
@@ -386,7 +386,7 @@ void loop() {
       Serial.write(tempCString);
       Serial.write("\r\n");
 #endif
-#ifdef useSdCard
+#ifdef USE_SD_CARD
       if (isSDCard) {
         myFile.write(countString);
         myFile.write(separatorChar);
@@ -405,23 +405,23 @@ void loop() {
 #endif
 #endif
     }
-    //digitalWrite(ledPin,LOW);
-    PORTD = PORTD & (~ledPin); //Make the led pin low
+    //digitalWrite(PIN_LED,LOW);
+    PORTD = PORTD & (~PIN_LED); //Make the led pin low
     //Wait until the pulse falls back so does not trigger multiple times for the one muon.
-    while (analogRead(detectorPin) > resetThreshold) {
+    while (analogRead(PIN_DETECTOR) > THRESHOLD_RESET) {
     }
 
     if (isMaster) {
-      //digitalWrite(coincidencePin,LOW);
-      PORTD = PORTD & (~coincidencePin); //Make the coincidence pin low
+      //digitalWrite(PIN_COINCIDENCE,LOW);
+      PORTD = PORTD & (~PIN_COINCIDENCE); //Make the coincidence pin low
     }
     totalDeadtime += (micros() - timeStamp) / 1000;
   }
-#ifdef useScreen
+#ifdef USE_SCREEN
   updateTime();
 #endif
 }
-#ifdef useScreen
+#ifdef USE_SCREEN
 void updateTime() {
   //Update the clock and rate on the display every second.
   static unsigned long nextTime = 0;
@@ -459,11 +459,11 @@ void updateTime() {
     updateScreen();
     nextTime = millis();
     totalDeadtime += nextTime - timeOfUpdate;
-    nextTime += screenUpdateTime;
+    nextTime += SCREEN_UPDATE_INTERVAL;
   }
 }
 #endif
-#ifdef useScreen
+#ifdef USE_SCREEN
 void updateScreen() {
   //Only update the count and pulse size part of the display when required
   static unsigned long lastCount = 90; //Some value other than 0
@@ -475,12 +475,12 @@ void updateScreen() {
     //Draw a line indicating the size of the pulse on the u8x8 display
     if (count == 0) {
       strcpy_P(charBuffer, detectorReady);
-    } else if (sipmVoltage > largePulseThreshold) {
+    } else if (sipmVoltage > THRESHOLD_LARGE) {
       strcpy_P(charBuffer, sipmWow);
     } else {
       byte i = 0;
       for (; (i < (sipmVoltage + 10) / 10) && (i < 15); i++) {
-        charBuffer[i] = barChartChar;
+        charBuffer[i] = CHAR_BAR_CHART;
       }
       //Fill the rest up with spaces to cover the previous graph
       for (; i < 15; i++) {
@@ -501,7 +501,7 @@ float get_sipm_voltage(float adc_value) {
   }
   return voltage;
 }
-#ifdef useScreen
+#ifdef USE_SCREEN
 void runningTime(char * timeSinceStart) {
   unsigned long milliSeconds = millis() - startTime;
   byte seconds = milliSeconds / 1000 % 60;
@@ -534,10 +534,10 @@ void runningTime(char * timeSinceStart) {
   strcat(timeSinceStart, number);
 }
 #endif
-#ifdef useSdCard
+#ifdef USE_SD_CARD
 void deleteFiles(byte index, char* extension) {
   char charBuffer[12];
-  for (byte i = index; i < index + numberOfFilesToDelete; i++) {
+  for (byte i = index; i < index + NUMBER_FILES_TO_DELETE; i++) {
     filenameOfI(i, charBuffer, extension);
     if (SD.exists(charBuffer)) {
       Serial.print(F("Removing "));
@@ -547,19 +547,19 @@ void deleteFiles(byte index, char* extension) {
   }
 }
 #endif
-#ifdef useSdCard
+#ifdef USE_SD_CARD
 void filenameOfI(byte i, char * returnBuffer, char * extension) {
   //Copy file name template from flash into ram
   strcpy_P(returnBuffer, filename);
   //Split i into a three digit number and then convert to ASCII by adding 48
-  returnBuffer[fileNumberStartPoint] = (i / 100) + 48;
-  returnBuffer[fileNumberStartPoint + 1] = ((i / 10) % 10) + 48;
-  returnBuffer[fileNumberStartPoint + 2] = (i % 10) + 48;
-  returnBuffer[fileNumberStartPoint + 3] = 0; //Null terminate it
+  returnBuffer[FILENAME_NUMBER_START_POS] = (i / 100) + 48;
+  returnBuffer[FILENAME_NUMBER_START_POS + 1] = ((i / 10) % 10) + 48;
+  returnBuffer[FILENAME_NUMBER_START_POS + 2] = (i % 10) + 48;
+  returnBuffer[FILENAME_NUMBER_START_POS + 3] = 0; //Null terminate it
   strcat(returnBuffer,extension);
 }
 #endif
-#if defined useScreen || defined useSerial || defined useSdCard
+#if defined USE_SCREEN || defined USE_SERIAL || defined USE_SD_CARD
 int getEepromString(int startAddress, int maxChars, char * returnBuffer) {
   int endAddress = maxChars + startAddress;
   int returnBufferCount = 0;
@@ -579,12 +579,12 @@ int getEepromString(int startAddress, int maxChars, char * returnBuffer) {
   return returnBufferCount;
 }
 #endif
-#if defined useSerialSettings && defined useSerial
+#if defined USE_SERIAL_SETTINGS && defined USE_SERIAL
 void enterSettings() {
   //Only bother checking if something was sent to the arduino
   if(Serial.available()) {
-    PORTD = PORTD | ledPin; //Turn the led on
-    Serial.setTimeout(serialTimeout);
+    PORTD = PORTD | PIN_LED; //Turn the led on
+    Serial.setTimeout(SERIAL_TIMEOUT);
     char charBuffer[80];
     //if "Settings" was sent
     byte charsRead = Serial.readBytesUntil('\n',charBuffer,40);
@@ -598,7 +598,7 @@ void enterSettings() {
         Serial.write(charBuffer);
         strcpy_P(charBuffer, resetToExit);
         Serial.println(charBuffer);
-  #ifdef useScreen
+  #ifdef USE_SCREEN
         u8x8.clear();
         u8x8.setInverseFont(1);
         //Fille the screen with white to make look different - might be useful to check all of the display is working properly
@@ -633,9 +633,9 @@ void enterSettings() {
         while(true) {
           //Wait until something else is sent
           clearSerialBuffer();
-          PORTD = PORTD | ledPin; //Turn the led on
+          PORTD = PORTD | PIN_LED; //Turn the led on
           while(!Serial.available());
-          PORTD = PORTD & (~ledPin); //Make the led pin low
+          PORTD = PORTD & (~PIN_LED); //Make the led pin low
           strcpy_P(charBuffer, settingsString);
           //if Something was sent
           charsRead = Serial.readBytesUntil(' ', charBuffer, 40);
@@ -647,7 +647,7 @@ void enterSettings() {
             if(strcmp(charBuffer,compareBuffer) == 0) {
               charsRead = Serial.readBytesUntil('\n', charBuffer, 40);
               charBuffer[charsRead] = 0;
-              writeToEeprom(deviceID1Address,charBuffer);
+              writeToEeprom(EEPROM_ID1,charBuffer);
               isSuccess = true;
             }
             strcpy_P(compareBuffer, id2String);
@@ -655,7 +655,7 @@ void enterSettings() {
             if(strcmp(charBuffer,compareBuffer) == 0) {
               charsRead = Serial.readBytesUntil('\n', charBuffer, 40);
               charBuffer[charsRead] = 0;
-              writeToEeprom(deviceID2Address,charBuffer);
+              writeToEeprom(EEPROM_ID2,charBuffer);
               isSuccess = true;
             }
             strcpy_P(compareBuffer, formatString);
@@ -665,9 +665,9 @@ void enterSettings() {
               charBuffer[charsRead] = 0;
               strcpy_P(compareBuffer, txtString);
               if(strcmp(charBuffer,compareBuffer) == 0) {
-                EEPROM.update(formatAddress,0);
+                EEPROM.update(EEPROM_FILE_FORMAT,0);
               } else {
-                EEPROM.update(formatAddress,1);
+                EEPROM.update(EEPROM_FILE_FORMAT,1);
               }
               isSuccess = true;
             }
@@ -675,8 +675,8 @@ void enterSettings() {
             //If it matches
             if(strcmp(charBuffer,compareBuffer) == 0) {
               charsRead = Serial.parseInt();
-              EEPROM.update(contrastAddress,charsRead);
-  #ifdef useScreen
+              EEPROM.update(EEPROM_CONSTRAST,charsRead);
+  #ifdef USE_SCREEN
               u8x8.setContrast(charsRead);
   #endif
               isSuccess = true;
@@ -692,7 +692,7 @@ void enterSettings() {
       }
     }
     delay(10000);
-    PORTD = PORTD & (~ledPin); //Make the led pin low
+    PORTD = PORTD & (~PIN_LED); //Make the led pin low
   }
 }
 //Write a string to eeprom starting from an address and stopping when running out of eeprom to write or the whole string is written
