@@ -2,7 +2,7 @@
  * Code adapted from Spencer Axiani's original software and designs by Jotham Gates
  * This file allows the software to be customised without having to scroll through many lines of code.
  */
-#define firmwareVers "2.1.1 non official"
+#define firmwareVers "2.2"
 //Pins
 #define detectorPin A0
 #define temperaturePin A3

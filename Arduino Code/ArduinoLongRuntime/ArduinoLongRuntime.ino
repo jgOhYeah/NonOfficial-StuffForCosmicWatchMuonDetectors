@@ -13,6 +13,7 @@
     - Tries to use char arrays instead of the String library to save RAM.
     - Does not fully support the python scripts for downloading and deleting files from the sd card
     - EEPROM can be programmed by the main program - type "Settings" (with the serial terminal set to \n as new line) before the detector finishes starting up.
+    - The screen has a day counter as well as hours, minutes and seconds
 
    Libraries required:
    Builtin:
@@ -428,7 +429,8 @@ void updateTime() {
     nextTime = millis();
     unsigned long timeOfUpdate = nextTime;
     //u8x8.setCursor(0,2);
-    char charBuffer[11]; //10 bytes should be enough, but add a bit more 999:00:00 is about a month and a bit, 9999:00:00 is over a year - millis() rolls over after 50 days - possibly add stuff in to handle this?
+    char charBuffer[12]; //10 bytes should be enough, but add a bit more 999:00:00 is about a month and a bit, 9999:00:00 is over a year - millis() rolls over after 50 days - possibly add stuff in to handle this?
+    //Time:dd:hh:mm:ss change to?
     runningTime(charBuffer);
     u8x8.draw1x2String(5, 2, charBuffer);
     //Calculate the count rate and standared deviation
@@ -504,10 +506,19 @@ void runningTime(char * timeSinceStart) {
   unsigned long milliSeconds = millis() - startTime;
   byte seconds = milliSeconds / 1000 % 60;
   byte minutes = milliSeconds / 60000 % 60;
-  unsigned int hours = milliSeconds / 3600000;
+  byte hours = milliSeconds / 3600000 % 24;
+  byte days = milliSeconds / 86400000; //Days
+  
   char number[7];
-  itoa(hours, number, 10);
+  itoa(days, number, 10);
   strcpy(timeSinceStart, number);
+  strcat_P(timeSinceStart, colon);
+  //Add a 0 to keep places
+  if (hours < 10) {
+    strcat_P(timeSinceStart, zero);
+  }
+  itoa(hours, number, 10);
+  strcat(timeSinceStart, number);
   strcat_P(timeSinceStart, colon);
   //Add a 0 to keep places
   if (minutes < 10) {

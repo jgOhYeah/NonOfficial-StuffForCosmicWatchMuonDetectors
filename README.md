@@ -1,11 +1,10 @@
 # NonOfficial-StuffForCosmicWatchMuonDetectors
 Extra code and stuff I (Jotham Gates) have made/adapted for Spencer Axiani's Cosmic Watch Desktop Muon Detector V2
-This is a work in progress and there might be the odd bug and issue.
 
 The official website can be found at [http://www.cosmicwatch.lns.mit.edu/](http://www.cosmicwatch.lns.mit.edu/)
 The official github repository and resources can be found at [https://github.com/spenceraxani/CosmicWatch-Desktop-Muon-Detector-v2](https://github.com/spenceraxani/CosmicWatch-Desktop-Muon-Detector-v2)
 
-## Arduino Sketch (OledAndSD5thAttempt)
+## Arduino Sketch (Arduino Code/ArduinoLongRuntime)
 The arduino sketch here is an attempt to get the oled display and the sd card to work at the same time.
 
 
@@ -20,14 +19,15 @@ With the serial terminal set to "\\n" as the line ending character, type "Settin
 
 From there, type "ID1 " then the name for the first part of the detector id or "ID2 " then name for the second part of the detector id or "Format " then ".csv" or ".txt" to select the format to save to the sd card. - Changing this will have no effect if useSdCard is not defined (commented out) in defines.h.
 
-If you happen to make a mistake when typing in a setting to change and are having problems changing anything else, either reset the detector and reenter the settings menu or try typing something along the lines of "x x " or "dd  cv vvxcsd cx" to the the light to come on again (or go off, then type again to make it turn on). - This is due to a slight issue with how the program accepts text.
+If you happen to make a mistake when typing in a setting to change and are having problems changing anything else, either reset the detector and reenter the settings menu or try typing something along the lines of "x x " or "dd  cv vvxcsd cx" to the the light to come on again (or go off, then type again to make it turn on). - This is due to a slight issue with how the program accepts text. The code for this bit works, but isn't the tidiest and probably needs to be fixed at some stage.
 
-## Bulk Settings Arduino Sketch
+## Bulk Settings Arduino Sketch (Arduino Code/bulkSettings)
 Use to load the default settings into eeprom if you have a few detectors to program or don't want to use the built in settings menu.
 
 Similar to the official naming.ino sketch except supports the second line of the detector ID and the file format.
 
 To use, edit the #defines in the top of the file then compile and upload. When the Arduino next starts up, it will copy the values into EEPROM.
+
 ## Muon Detector GUI
 This is a smallish program written in Unity using the C# programming language. It displays live information from the detector. - I would probably recommend the [official online version](http://cosmicwatch.lns.mit.edu/measure) combined with one of the server programs if you have internet access.
 The compiled files can be found in the folder named build. Please note that I have not tested the Macintosh version and it may or may not work.

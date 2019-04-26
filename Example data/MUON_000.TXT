@@ -1,0 +1,21 @@
+Cosmic Watch Muon Detector
+Device ID: Kingswood College A
+Firmware version: 2.1 non official
+Compiled: Jul 20 2018 at 11:54:37
+Official website: http://cosmicwatch.lns.mit.edu/
+This software can be found at: https://github.com/jgOhYeah/NonOfficial-StuffForCosmicWatchMuonDetectors
+
+Master
+Count Time_Stamp Measured_ADC SIPM_Voltage Dead_Time Temperature_C
+1 1888 131 24.5 97 20.3
+2 2640 97 21.7 187 19.6
+3 3732 76 19.7 276 19.8
+4 4098 83 20.5 301 19.6
+5 4490 448 112 390 19.6
+6 7636 103 22.2 545 19.6
+7 9534 600 204 676 18.8
+8 10033 304 53.7 701 19.6
+9 11112 455 117 793 18.8
+10 11427 364 71.7 819 19.6
+11 12366 71 19.1 912 19.6
+12 12631 147 26.2 937 19.6
